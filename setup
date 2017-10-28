@@ -1,0 +1,136 @@
+#!/usr/bin/python3
+'''
+.setup.py
+This script sets up my Ubuntu environment, from a fresh install, just the way
+I like it. Installs necessary packages, and provides config files by
+symlinking from the dotfiles folder.
+'''
+
+# Imports
+import os
+import subprocess
+import shutil
+from sys import stdout
+
+
+def query_yes_no(question, default="yes"):
+    """Ask a yes/no question via raw_input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is one of "yes" or "no".
+    """
+    valid = {"yes": "yes", "y": "yes", "ye": "yes",
+             "no": "no", "n": "no"}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while 1:
+        stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return default
+        elif choice in valid.keys():
+            return valid[choice]
+        else:
+            stdout.write("Please respond with 'yes' or 'no' "
+                         "(or 'y' or 'n').\n")
+
+
+# Variables
+dotfiles_dir = '~/dotfiles'               # dotfiles directory
+dotfiles_dir_old = '~/dotfiles_old'        # old dotfiles backup directory
+
+# List of ubunutu packages to install
+packages = ['i3', 'suckless-tools', 'i3status', 'htop', 'redshift-gtk',
+            'ipython3', 'ipython3', 'python-pip', 'python3-pip', 'feh',
+            'compton', 'guake', 'xclip', 'scrot', 'imagemagick', 'git']
+
+extra_packages = ['texlive']
+
+# List of python3 packages to install
+pip3_packages = ['pywal', 'matplotlib', 'numpy', 'jupyter', 'pep8']
+
+# list of files/folders to symlink and their symlink locations
+config_files = {'bashrc': '~/.bashrc',
+                'i3': '~/.config/i3/config',
+                'redshift': '~/.config/redshift/config',
+                'gitconfig': '~/.gitconfig',
+                'ST3_User_Dir': '~/.config/sublime-text-3/Packages/User'}
+
+# Expad user directory as Python doesn't understand ~ in paths
+dotfiles_dir = os.path.expanduser(dotfiles_dir)
+dotfiles_dir_old = os.path.expanduser(dotfiles_dir_old)
+for file in config_files:
+    config_files[file] = os.path.expanduser(config_files[file])
+
+# Install ubuntu packages
+stdout.write('Installing Ubuntu packages...\r\n')
+# Update first
+packages_to_install = packages
+for package in extra_packages:
+    if query_yes_no('Install {}?'.format(package), default="no"):
+        packages_to_install.append(package)
+
+    # Install Sublime Text 3
+    if query_yes_no("Install Sublime Text 3?", default="no"):
+        # Exectue things from he Sublime Text 3 linux installation instructions
+        os.system('wget -qO - '
+                  'https://download.sublimetext.com/sublimehq-pub.gpg | '
+                  'apt-key add -')
+        subprocess.call(['apt-get', 'install', 'apt-transport-https'])
+        os.system('echo "deb https://download.sublimetext.com/ apt/stable/" | '
+                  'sudo tee /etc/apt/sources.list.d/sublime-text.list')
+        packages_to_install.append('sublime-text')
+
+subprocess.call(['apt-get', 'update'])
+cmd = ['apt-get', 'install', '-y']
+subprocess.call(cmd + packages)
+
+stdout.write('...done\r\n')
+
+# Install pip packages
+stdout.write('Installing Python3 packages...\r\n')
+cmd = ['pip3', 'install']
+subprocess.call(cmd + pip3_packages)
+stdout.write('...done\r\n')
+
+# create dotfiles_old in homedir
+stdout.write('Creating {} for backup of any existing \
+              dotfiles in ~'.format(dotfiles_dir_old))
+if not os.path.exists(dotfiles_dir_old):
+    os.makedirs(dotfiles_dir_old)
+stdout.write('...done\r\n')
+
+# create the symlinks
+for config, sympath in config_files.items():
+    stdout.write('Creating symlink for {}'.format(config))
+    try:
+        if os.path.isdir(sympath):
+            shutil.rmtree(sympath)
+        else:
+            os.remove(sympath)
+    except FileNotFoundError:
+        pass
+
+    # Create relevant directory structure if needed
+    try:
+        os.makedirs(os.path.split(sympath)[0])
+    except FileExistsError:
+        pass
+
+    # Create the actual symlink if needed
+    try:
+        os.symlink(os.path.join(dotfiles_dir, config), sympath)
+        stdout.write(' ...done\r\n')
+    except FileExistsError:
+        stdout.write(' ... already exists\r\n')

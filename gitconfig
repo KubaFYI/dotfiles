@@ -1,0 +1,5 @@
+[user]
+	email = tech@kuba.fyi
+	name = Kuba Sanak
+[core]
+	excludesfile = ~/dotfiles/gitignore_global
