@@ -1,6 +1,30 @@
+# Cache files for Sublime Text
+ST3_User_Dir/*.tmlanguage.cache
+ST3_User_Dir/*.tmPreferences.cache
+ST3_User_Dir/*.stTheme.cache
+
+# Workspace files are user-specific
+ST3_User_Dir/*.sublime-workspace
+
+# Project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using Sublime Text
+# *.sublime-project
+
+# SFTP configuration file
+ST3_User_Dir/sftp-config.json
+
+# Package control specific files
 ST3_User_Dir/Package Control.last-run
 ST3_User_Dir/Package Control.ca-list
 ST3_User_Dir/Package Control.ca-bundle
 ST3_User_Dir/Package Control.system-ca-bundle
 ST3_User_Dir/Package Control.cache/
 ST3_User_Dir/Package Control.ca-certs/
+ST3_User_Dir/Package Control.merged-ca-bundle
+ST3_User_Dir/Package Control.user-ca-bundle
+ST3_User_Dir/oscrypto-ca-bundle.crt
+ST3_User_Dir/bh_unicode_properties.cache
+
+# Sublime-github package stores a github token in this file
+# https://packagecontrol.io/packages/sublime-github
+ST3_User_Dir/GitHub.sublime-settings
