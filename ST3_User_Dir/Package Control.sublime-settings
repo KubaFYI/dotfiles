@@ -5,6 +5,9 @@
 	],
 	"installed_packages":
 	[
+		"Alignment",
+		"Git",
+		"GitGutter",
 		"LaTeXTools",
 		"Package Control",
 		"SublimeLinter",
