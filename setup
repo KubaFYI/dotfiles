@@ -6,6 +6,8 @@ I like it. Installs necessary packages, and provides config files by
 symlinking from the dotfiles folder.
 '''
 
+# TODO add i3gaps installation
+
 # Imports
 import os
 import subprocess
@@ -38,9 +40,9 @@ def query_yes_no(question, default="yes"):
         stdout.write(question + prompt)
         choice = input().lower()
         if default is not None and choice == '':
-            return default
+            return default == 'yes'
         elif choice in valid.keys():
-            return valid[choice]
+            return valid[choice] == 'yes'
         else:
             stdout.write("Please respond with 'yes' or 'no' "
                          "(or 'y' or 'n').\n")
@@ -53,7 +55,8 @@ dotfiles_dir_old = '~/dotfiles_old'        # old dotfiles backup directory
 # List of ubunutu packages to install
 packages = ['i3', 'suckless-tools', 'i3status', 'htop', 'redshift-gtk',
             'ipython3', 'ipython3', 'python-pip', 'python3-pip', 'feh',
-            'compton', 'guake', 'xclip', 'scrot', 'imagemagick', 'git']
+            'compton', 'guake', 'xclip', 'scrot', 'imagemagick', 'git',
+            'autoconf', 'okular']
 
 extra_packages = ['texlive']
 
@@ -73,40 +76,56 @@ dotfiles_dir_old = os.path.expanduser(dotfiles_dir_old)
 for file in config_files:
     config_files[file] = os.path.expanduser(config_files[file])
 
-# Install ubuntu packages
-stdout.write('Installing Ubuntu packages...\r\n')
-# Update first
-packages_to_install = packages
-for package in extra_packages:
-    if query_yes_no('Install {}?'.format(package), default="no"):
-        packages_to_install.append(package)
+if query_yes_no('Perform any installations?', default='no'):
+    # Install ubuntu packages
+    stdout.write('Installing Ubuntu packages...\r\n')
+    # Update first
+    packages_to_install = packages
+    for package in extra_packages:
+        if query_yes_no('Install {}?'.format(package), default="no"):
+            packages_to_install.append(package)
 
-    # Install Sublime Text 3
-    if query_yes_no("Install Sublime Text 3?", default="no"):
-        # Exectue things from he Sublime Text 3 linux installation instructions
-        os.system('wget -qO - '
-                  'https://download.sublimetext.com/sublimehq-pub.gpg | '
-                  'apt-key add -')
-        subprocess.call(['apt-get', 'install', 'apt-transport-https'])
-        os.system('echo "deb https://download.sublimetext.com/ apt/stable/" | '
-                  'sudo tee /etc/apt/sources.list.d/sublime-text.list')
-        packages_to_install.append('sublime-text')
+        # Install Sublime Text 3
+        if query_yes_no("Install Sublime Text 3?", default="no"):
+            # Exectue things from he Sublime Text 3 linux installation
+            # instructions
+            os.system('wget -qO - '
+                      'https://download.sublimetext.com/sublimehq-pub.gpg | '
+                      'apt-key add -')
+            subprocess.call(['apt-get', 'install', 'apt-transport-https'])
+            os.system('echo "deb https://download.sublimetext.com/ '
+                      'apt/stable/" | '
+                      'sudo tee /etc/apt/sources.list.d/sublime-text.list')
+            packages_to_install.append('sublime-text')
 
-subprocess.call(['apt-get', 'update'])
-cmd = ['apt-get', 'install', '-y']
-subprocess.call(cmd + packages)
+        # Install Spotify
+        if query_yes_no("Install Spotify?", default="no"):
+            # Exectue things from he Sublime Text 3 linux installation
+            # instructions
+            subprocess.call(['apt-key', 'adv', '--keyserver',
+                             'hkp://keyserver.ubuntu.com:80', '--recv-keys',
+                             'BBEBDCB318AD50EC6865090613B00F1FD2C19886',
+                             '0DF731E45CE24F27EEEB1450EFDC8610341D9410'])
+            os.system('echo deb http://repository.spotify.com stable non-free '
+                      '| sudo tee /etc/apt/sources.list.d/spotify.list')
+            packages_to_install.append('spotify-client')
 
-stdout.write('...done\r\n')
+    subprocess.call(['apt-get', 'update'])
+    cmd = ['apt-get', 'install', '-y']
+    subprocess.call(cmd + packages)
+    subprocess.call(['apt-get', 'upgrade'])
 
-# Install pip packages
-stdout.write('Installing Python3 packages...\r\n')
-cmd = ['pip3', 'install']
-subprocess.call(cmd + pip3_packages)
-stdout.write('...done\r\n')
+    stdout.write('...done\r\n')
+
+    # Install pip packages
+    stdout.write('Installing Python3 packages...\r\n')
+    cmd = ['pip3', 'install']
+    subprocess.call(cmd + pip3_packages)
+    stdout.write('...done\r\n')
 
 # create dotfiles_old in homedir
-stdout.write('Creating {} for backup of any existing \
-              dotfiles in ~'.format(dotfiles_dir_old))
+stdout.write('Creating {} for backup of any existing '
+             'dotfiles in ~'.format(dotfiles_dir_old))
 if not os.path.exists(dotfiles_dir_old):
     os.makedirs(dotfiles_dir_old)
 stdout.write('...done\r\n')
@@ -114,23 +133,22 @@ stdout.write('...done\r\n')
 # create the symlinks
 for config, sympath in config_files.items():
     stdout.write('Creating symlink for {}'.format(config))
-    try:
+    if os.path.exists(sympath):
         if os.path.isdir(sympath):
-            shutil.rmtree(sympath)
+            try:
+                # Removing as a symlink to a directory
+                os.unlink(sympath)
+            except IsADirectoryError:
+                # Remove as a directory
+                shutil.rmtree(sympath)
         else:
+            # Remove as a symlink to a file
             os.remove(sympath)
-    except FileNotFoundError:
-        pass
 
     # Create relevant directory structure if needed
-    try:
+    if not os.path.exists(os.path.split(sympath)[0]):
         os.makedirs(os.path.split(sympath)[0])
-    except FileExistsError:
-        pass
 
     # Create the actual symlink if needed
-    try:
-        os.symlink(os.path.join(dotfiles_dir, config), sympath)
-        stdout.write(' ...done\r\n')
-    except FileExistsError:
-        stdout.write(' ... already exists\r\n')
+    os.symlink(os.path.join(dotfiles_dir, config), sympath)
+    stdout.write(' ...done\r\n')
