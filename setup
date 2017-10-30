@@ -12,6 +12,7 @@ symlinking from the dotfiles folder.
 import os
 import subprocess
 import shutil
+from getpass import getuser
 from sys import stdout
 
 
@@ -143,12 +144,17 @@ for config, sympath in config_files.items():
                 shutil.rmtree(sympath)
         else:
             # Remove as a symlink to a file
-            os.remove(sympath)
+            os.unlink(sympath)
 
     # Create relevant directory structure if needed
     if not os.path.exists(os.path.split(sympath)[0]):
-        os.makedirs(os.path.split(sympath)[0])
+        os.makedirs(os.path.split(sympath)[0], mode=0x755)
 
     # Create the actual symlink if needed
     os.symlink(os.path.join(dotfiles_dir, config), sympath)
+    # A dirty hack to get the user name even if script is executed with sudo
+    username = os.path.split(os.path.expanduser('~'))[1]
+    # shutil.chown changes the target directory owner and not the symlink
+    # so need to acutally call the system
+    os.system('chown -h {0}:{0} {1}'.format(username, sympath))
     stdout.write(' ...done\r\n')
