@@ -168,10 +168,9 @@ exec guake
 exec --no-startup-id redshift-gtk -c ~/.config/redshift/config
 
 # Spare monitor
-exec xrandr --output HDMI-1-1 --auto --left-of eDP-1-1
+exec xrandr --output HDMI-1-1 --auto --right-of eDP-1-1
 
-
-bindsym $mod+p exec ~/Code/scripts/lock.sh
+bindsym $mod+p exec ~/dotfiles/scripts/lock
 
 # Move workspace between monitors
 bindsym $mod+x move workspace to output right
@@ -206,6 +205,7 @@ exec mount -t ntfs /dev/sdb2 /mnt/ntfs_data
 
 
 # i3-gaps configuration
+for_window [class="^.*"] border pixel 0
 gaps inner 10
 gaps outer 10
 smart_gaps on

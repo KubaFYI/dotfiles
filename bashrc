@@ -116,5 +116,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-PATH=$PATH:~/dotfiles/scripts
+export PATH=$PATH:~/dotfiles/scripts:/usr/local/cuda-8.0/bin
+export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
+export CUDA_HOME=/usr/local/cuda-8.0/
 
+alias tensorflow_activate='source ~/Code/tensorflow/bin/activate'
