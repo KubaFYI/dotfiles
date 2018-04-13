@@ -158,8 +158,9 @@ bar {
 # My own stuff added below
 
 # Drop-down terminal
-exec compton --vsync opengl --backend glx --paint-on-overlay
+exec compton --config ~/.config/compton/config
 exec guake
+exec blueman-applet
 
 # Set initial background image
 # exec feh --bg-center ~/Pictures/Wallpapers/Material.png
@@ -209,3 +210,21 @@ for_window [class="^.*"] border pixel 0
 gaps inner 10
 gaps outer 10
 smart_gaps on
+
+# A fix for puleaudio not initialising correctly at startup
+exec /bin/bash pulseaudio_fix.sh
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id i3exit lock, mode "default"
+    bindsym e exec --no-startup-id i3exit logout, mode "default"
+    bindsym s exec --no-startup-id i3exit suspend, mode "default"
+    bindsym h exec --no-startup-id i3exit hibernate, mode "default"
+    bindsym r exec --no-startup-id i3exit reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Insert mode "$mode_system"

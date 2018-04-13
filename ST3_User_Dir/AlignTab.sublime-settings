@@ -1,0 +1,4 @@
+{
+   "keys": ["super+shift+a"], "command": "align_tab",
+   "args" : {"live_preview" : true}
+ }

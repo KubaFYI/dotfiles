@@ -69,7 +69,8 @@ config_files = {'bashrc': '~/.bashrc',
                 'i3': '~/.config/i3/config',
                 'redshift': '~/.config/redshift/config',
                 'gitconfig': '~/.gitconfig',
-                'ST3_User_Dir': '~/.config/sublime-text-3/Packages/User'}
+                'ST3_User_Dir': '~/.config/sublime-text-3/Packages/User',
+                'compton': '~/.config/compton/config'}
 
 # Expad user directory as Python doesn't understand ~ in paths
 dotfiles_dir = os.path.expanduser(dotfiles_dir)
@@ -158,3 +159,4 @@ for config, sympath in config_files.items():
     # so need to acutally call the system
     os.system('chown -h {0}:{0} {1}'.format(username, sympath))
     stdout.write(' ...done\r\n')
+

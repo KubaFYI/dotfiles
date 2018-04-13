@@ -5,13 +5,18 @@
 	],
 	"installed_packages":
 	[
-		"Alignment",
+		"Anaconda",
 		"Git",
+		"Git Conflict Resolver",
 		"GitGutter",
+		"IPython Notebook",
 		"LaTeXTools",
 		"Package Control",
+		"Python 3",
+		"Python Fix Imports",
 		"SublimeLinter",
 		"SublimeLinter-pep8",
-		"Transcrypt"
+		"Transcrypt",
+		"WordCount"
 	]
 }
