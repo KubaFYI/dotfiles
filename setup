@@ -54,7 +54,7 @@ dotfiles_dir = '~/dotfiles'               # dotfiles directory
 dotfiles_dir_old = '~/dotfiles_old'        # old dotfiles backup directory
 
 # List of ubunutu packages to install
-packages = ['i3', 'suckless-tools', 'i3status', 'htop', 'redshift-gtk',
+packages = ['suckless-tools', 'i3status', 'htop', 'redshift-gtk',
             'ipython3', 'ipython3', 'python-pip', 'python3-pip', 'feh',
             'compton', 'guake', 'xclip', 'scrot', 'imagemagick', 'git',
             'autoconf', 'okular']
