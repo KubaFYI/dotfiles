@@ -120,11 +120,3 @@ export PATH=$PATH:~/dotfiles/scripts:/usr/local/cuda-8.0/bin
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
 export CUDA_HOME=/usr/local/cuda-8.0/
 
-alias tensorflow_activate='source ~/Code/tensorflow/bin/activate'
-alias pywal='~/dotfiles/scripts/pywal.sh'
-alias pulseaudio_fix='~/dotfiles/scripts/pulseaudio_fix.sh'
-alias hdmi_attach='xrandr --output HDMI-1-1 --auto --right-of eDP-1-1'
-alias hdmi_detach='xrandr --auto'
-alias audio_usb='pactl set-default-sink alsa_output.usb-Creative_Technology_Ltd_SB_X-Fi_Surround_5.1_Pro_000001oW-00.analog-stereo'
-alias audio_internal='pactl set-default-sink alsa_output.pci-0000_00_1f.3.analog-stereo'
-alias ntop='watch -n 0.5 nvidia-smi'

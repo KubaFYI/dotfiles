@@ -228,3 +228,6 @@ mode "$mode_system" {
     bindsym Escape mode "default"
 }
 bindsym $mod+Insert mode "$mode_system"
+
+# Spawn LaTeX pdf's compiled with Sublime text on a different workspace
+assign [class="Evince"] 9
