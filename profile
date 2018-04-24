@@ -22,5 +22,5 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 if [ -d "$HOME/dotfiles" ] ; then
-    PATH="$HOME/dotfiles/scripts"
+    PATH="$PATH:$HOME/dotfiles/scripts"
 fi
