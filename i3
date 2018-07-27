@@ -153,6 +153,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3status
+        height 20
 }
 
 # My own stuff added below
@@ -161,9 +162,6 @@ bar {
 exec compton --config ~/.config/compton/config
 exec guake
 exec blueman-applet
-
-# Set initial background image
-# exec feh --bg-center ~/Pictures/Wallpapers/Material.png
 
 # Night screen tint 
 exec --no-startup-id redshift-gtk -c ~/.config/redshift/config
@@ -197,22 +195,33 @@ exec xbacklight -set 15
 exec nm-applet
 exec ibus-daemon
 
-exec python3 -m pywal -i "/home/kubafyi/Pictures/Wallpapers/"
-
-
-# Mount NTFS partitions
-exec mount -t ntfs /dev/sda4 /mnt/windows
-exec mount -t ntfs /dev/sdb2 /mnt/ntfs_data
-
+exec --no-startup-id  "python3 -m pywal -i '/home/kubafyi/Pictures/Wallpapers/'"
 
 # i3-gaps configuration
 for_window [class="^.*"] border pixel 0
 gaps inner 10
 gaps outer 10
 smart_gaps on
+smart_borders on
+
+### i3-gaps stuff ###
+
+# Necessary for i3-gaps to work properly (pixel can be any value)
+#for_window [class="^.*"] border pixel 3
+
+# Smart Gaps
+#smart_gaps on
+
+# Smart Borders
+#smart_borders on
+
+# Set inner/outer gaps
+#gaps inner 12
+#gaps outer -2
+
 
 # A fix for puleaudio not initialising correctly at startup
-exec /bin/bash pulseaudio_fix.sh
+exec "/bin/bash pulseaudio_fix.sh"
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {

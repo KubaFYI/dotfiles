@@ -54,10 +54,11 @@ dotfiles_dir = '~/dotfiles'               # dotfiles directory
 dotfiles_dir_old = '~/dotfiles_old'        # old dotfiles backup directory
 
 # List of ubunutu packages to install
-packages = ['suckless-tools', 'i3status', 'htop', 'redshift-gtk',
+packages = ['suckless-tools', 'i3status', 'i3lock', 'htop', 'redshift-gtk',
             'ipython3', 'ipython3', 'python-pip', 'python3-pip', 'feh',
             'compton', 'guake', 'xclip', 'scrot', 'imagemagick', 'git',
-            'autoconf', 'okular']
+            'autoconf', 'okular', 'xbacklight', 'blueman', 'acalc',
+            'powertop']
 
 extra_packages = ['texlive']
 
@@ -147,14 +148,16 @@ for config, sympath in config_files.items():
             # Remove as a symlink to a file
             os.unlink(sympath)
 
+    # A dirty hack to get the user name even if script is executed with sudo
+    username = os.path.split(os.path.expanduser('~'))[1]
+
     # Create relevant directory structure if needed
     if not os.path.exists(os.path.split(sympath)[0]):
         os.makedirs(os.path.split(sympath)[0], mode=0x755)
+        shutil.chown(os.path.split(sympath)[0], user=username)
 
     # Create the actual symlink if needed
     os.symlink(os.path.join(dotfiles_dir, config), sympath)
-    # A dirty hack to get the user name even if script is executed with sudo
-    username = os.path.split(os.path.expanduser('~'))[1]
     # shutil.chown changes the target directory owner and not the symlink
     # so need to acutally call the system
     os.system('chown -h {0}:{0} {1}'.format(username, sympath))
