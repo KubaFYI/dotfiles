@@ -63,15 +63,16 @@ packages = ['suckless-tools', 'i3status', 'i3lock', 'htop', 'redshift-gtk',
 extra_packages = ['texlive']
 
 # List of python3 packages to install
-pip3_packages = ['pywal', 'matplotlib', 'numpy', 'jupyter', 'pep8']
-
+# pip3_packages = ['pywal', 'matplotlib', 'numpy', 'jupyter', 'pep8']
+pip3_packages = []
 # list of files/folders to symlink and their symlink locations
 config_files = {'bashrc': '~/.bashrc',
                 'i3': '~/.config/i3/config',
                 'redshift': '~/.config/redshift/config',
                 'gitconfig': '~/.gitconfig',
                 'ST3_User_Dir': '~/.config/sublime-text-3/Packages/User',
-                'compton': '~/.config/compton/config'}
+                'compton': '~/.config/compton/config',
+		'profile', '~/.profile'}
 
 # Expad user directory as Python doesn't understand ~ in paths
 dotfiles_dir = os.path.expanduser(dotfiles_dir)
@@ -121,10 +122,10 @@ if query_yes_no('Perform any installations?', default='no'):
     stdout.write('...done\r\n')
 
     # Install pip packages
-    stdout.write('Installing Python3 packages...\r\n')
-    cmd = ['pip3', 'install']
-    subprocess.call(cmd + pip3_packages)
-    stdout.write('...done\r\n')
+    # stdout.write('Installing Python3 packages...\r\n')
+    # cmd = ['pip3', 'install']
+    # subprocess.call(cmd + pip3_packages)
+    # stdout.write('...done\r\n')
 
 # create dotfiles_old in homedir
 stdout.write('Creating {} for backup of any existing '

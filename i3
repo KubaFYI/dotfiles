@@ -159,15 +159,15 @@ bar {
 # My own stuff added below
 
 # Drop-down terminal
-exec compton --config ~/.config/compton/config
-exec guake
-exec blueman-applet
+exec --no-startup-id compton --config ~/.config/compton/config > ~/comlog
+exec --no-startup-id guake
+exec --no-startup-id blueman-applet
 
 # Night screen tint 
 exec --no-startup-id redshift-gtk -c ~/.config/redshift/config
 
 # Spare monitor
-exec xrandr --output HDMI-1-1 --auto --right-of eDP-1-1
+exec xrandr --output HDMI1 --auto --left-of eDP1
 
 bindsym $mod+p exec ~/dotfiles/scripts/lock
 
@@ -193,9 +193,9 @@ bindsym XF86AudioNext exec qdbus org.mpris.MediaPlayer2.spotify /org/mpris/Media
 # some commands to be started at boot
 exec xbacklight -set 15
 exec nm-applet
-exec ibus-daemon
+# exec ibus-daemon
 
-exec --no-startup-id  "python3 -m pywal -i '/home/kubafyi/Pictures/Wallpapers/'"
+exec --no-startup-id "python3 -m pywal -i '/home/kubafyi/Pictures/Wallpapers/'"
 
 # i3-gaps configuration
 for_window [class="^.*"] border pixel 0
